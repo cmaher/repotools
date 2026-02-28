@@ -29,10 +29,13 @@ Each `src/cli/*.go` is a thin cobra command that calls into a domain package. Do
 ```
 make build     # builds ./repotools
 make test      # runs go test ./...
+make ci        # fmt-check + test (same as GitHub Actions)
 make install   # copies to ~/bin
 ```
 
-**IMPORTANT:** Run `make install` after every code change so `~/bin/repotools` stays current.
+**IMPORTANT:**
+- Run `make ci` before considering any task done.
+- Run `make install` after every code change so `~/bin/repotools` stays current.
 
 ## Dependencies
 
