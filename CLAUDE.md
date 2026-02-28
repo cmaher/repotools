@@ -37,11 +37,6 @@ make install   # copies to ~/bin
 - Run `make ci` before considering any task done.
 - Run `make install` after every code change so `~/bin/repotools` stays current.
 
-## Git Workflow
-
-- Never push directly to master. Always use feature branches and PRs.
-- CI runs on PRs to master/main only.
-
 ## Dependencies
 
 cobra only. No other external dependencies.
