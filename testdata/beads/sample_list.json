@@ -1,0 +1,42 @@
+[
+  {
+    "id": "E1",
+    "title": "Epic One",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 1,
+    "dependencies": []
+  },
+  {
+    "id": "T1",
+    "title": "Task One",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "dependencies": [{"type": "parent-child", "depends_on_id": "E1"}]
+  },
+  {
+    "id": "T2",
+    "title": "Task Two",
+    "issue_type": "task",
+    "status": "closed",
+    "priority": 2,
+    "dependencies": [{"type": "parent-child", "depends_on_id": "E1"}]
+  },
+  {
+    "id": "E2",
+    "title": "Sub Epic",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 1,
+    "dependencies": [{"type": "parent-child", "depends_on_id": "E1"}]
+  },
+  {
+    "id": "T3",
+    "title": "Sub Task",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "dependencies": [{"type": "parent-child", "depends_on_id": "E2"}]
+  }
+]
