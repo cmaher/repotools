@@ -9,9 +9,10 @@ import (
 
 func newLogCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "log [base]",
-		Short: "Commits since diverging from base branch",
-		Args:  cobra.MaximumNArgs(1),
+		Use:     "log [base]",
+		Aliases: []string{"lg"},
+		Short:   "Commits since diverging from base branch",
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			base := "master"
 			if len(args) > 0 {

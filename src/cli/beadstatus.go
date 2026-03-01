@@ -10,8 +10,9 @@ import (
 
 func newBeadStatusCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "bead-status",
-		Short: "Print beads project status report to stdout",
+		Use:     "bead-status",
+		Aliases: []string{"bs"},
+		Short:   "Print beads project status report to stdout",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return beads.RunBeadStatus(os.Stdout)
 		},

@@ -12,9 +12,10 @@ func newLocCmd() *cobra.Command {
 	var glob, exclude, marker string
 
 	cmd := &cobra.Command{
-		Use:   "loc paths...",
-		Short: "Count non-test lines of code per file",
-		Args:  cobra.MinimumNArgs(1),
+		Use:     "loc paths...",
+		Aliases: []string{"lo"},
+		Short:   "Count non-test lines of code per file",
+		Args:    cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return metrics.RunLOC(os.Stdout, args, glob, exclude, marker)
 		},
