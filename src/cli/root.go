@@ -36,7 +36,6 @@ func NewRootCmd() *cobra.Command {
 		newMultiFindCmd(),
 		newLocCmd(),
 		newFnSpansCmd(),
-		newMultiBeadCmd(),
 		newTkStatusCmd(),
 	)
 
