@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go:*)",
+      "Bash(make test:*)",
+      "Bash(make build:*)",
+      "Bash(./repotools:*)",
+      "Bash(make install:*)",
+      "Bash(bd list:*)",
+      "Bash(bd show:*)",
+      "Bash(gofmt:*)",
+      "Bash(make ci:*)",
+      "Bash(jj git:*)",
+      "Bash(jj commit:*)",
+      "Bash(jj bookmark:*)",
+      "WebFetch(domain:jeffreysprompts.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(jj root:*)",
+      "Bash(gh api:*)",
+      "Bash(br:*)",
+      "Bash(br list:*)",
+      "Bash(sqlite3:*)",
+      "Bash(python3:*)",
+      "Bash(tk:*)",
+      "Bash(grep:*)",
+      "Bash(jj status:*)",
+      "Bash(jj diff:*)",
+      "Bash(jj log:*)",
+      "Bash(jj describe:*)",
+      "Bash(jj split:*)",
+      "Bash(jj new:*)",
+      "Bash(jj rebase:*)"
+    ]
+  }
+}
