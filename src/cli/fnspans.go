@@ -12,9 +12,10 @@ func newFnSpansCmd() *cobra.Command {
 	var glob, excludePath, pattern, after, include, exclude string
 
 	cmd := &cobra.Command{
-		Use:   "fn-spans paths...",
-		Short: "Show function line ranges in source files",
-		Args:  cobra.MinimumNArgs(1),
+		Use:     "fn-spans paths...",
+		Aliases: []string{"fs"},
+		Short:   "Show function line ranges in source files",
+		Args:    cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return metrics.RunFnSpans(os.Stdout, args, glob, excludePath, pattern, after, include, exclude)
 		},

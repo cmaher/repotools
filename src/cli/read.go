@@ -11,9 +11,10 @@ import (
 
 func newReadCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "read <file> [start] [end]",
-		Short: "Print numbered lines from a file (optional range)",
-		Args:  cobra.RangeArgs(1, 3),
+		Use:     "read <file> [start] [end]",
+		Aliases: []string{"rd"},
+		Short:   "Print numbered lines from a file (optional range)",
+		Args:    cobra.RangeArgs(1, 3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
 			start, end := 0, 0

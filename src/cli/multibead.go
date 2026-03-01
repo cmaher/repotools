@@ -10,9 +10,10 @@ import (
 
 func newMultiBeadCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "multi-bead id1 [id2 ...]",
-		Short: "Show full details for multiple beads",
-		Args:  cobra.MinimumNArgs(1),
+		Use:     "multi-bead id1 [id2 ...]",
+		Aliases: []string{"mb"},
+		Short:   "Show full details for multiple beads",
+		Args:    cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return beads.RunMultiBead(os.Stdout, args)
 		},

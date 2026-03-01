@@ -12,9 +12,10 @@ import (
 
 func newMultiFindCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "multi-find <head_count> [find_opts...] path1 [path2 ...]",
-		Short: "Find files in multiple directories with truncated output",
-		Args:  cobra.MinimumNArgs(2),
+		Use:     "multi-find <head_count> [find_opts...] path1 [path2 ...]",
+		Aliases: []string{"mf"},
+		Short:   "Find files in multiple directories with truncated output",
+		Args:    cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			headCount, err := strconv.Atoi(args[0])
 			if err != nil {

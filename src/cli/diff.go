@@ -10,6 +10,7 @@ import (
 func newDiffCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "diff [base] [flags...]",
+		Aliases:            []string{"di"},
 		Short:              "Diff vs base branch",
 		DisableFlagParsing: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
