@@ -1,9 +1,12 @@
 package beads
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -150,38 +153,51 @@ func BuildStatusReport(items []BeadItem, today string) string {
 	return strings.Join(out, "\n")
 }
 
+func findBeadsJSONL() (string, error) {
+	dir := ".beads"
+	jsonl := filepath.Join(dir, "issues.jsonl")
+	if _, err := os.Stat(jsonl); err != nil {
+		return "", fmt.Errorf("no .beads/issues.jsonl found: %w", err)
+	}
+	return jsonl, nil
+}
+
+func parseJSONL(path string) ([]BeadItem, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	var items []BeadItem
+	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 0, 1024*1024), 1024*1024)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+		var item BeadItem
+		if err := json.Unmarshal([]byte(line), &item); err != nil {
+			continue
+		}
+		items = append(items, item)
+	}
+	return items, scanner.Err()
+}
+
 func RunBeadStatus(w io.Writer) error {
-	r, err := runner.RunNoCheck([]string{"bd", "list", "-n", "0", "--all", "--json"})
+	// Sync DB → JSONL first
+	runner.RunNoCheck([]string{"br", "sync", "--flush-only"})
+
+	path, err := findBeadsJSONL()
 	if err != nil {
 		return err
 	}
 
-	var items []BeadItem
-	stdout := strings.TrimSpace(r.Stdout)
-	if stdout != "" {
-		if err := json.Unmarshal([]byte(stdout), &items); err != nil {
-			return fmt.Errorf("parsing beads JSON: %w", err)
-		}
-	}
-
-	// Fetch items with "epic" label to populate Labels field
-	lr, err := runner.RunNoCheck([]string{"bd", "list", "-n", "0", "--all", "--json", "--label-any", "epic"})
-	if err == nil && lr.ExitCode == 0 {
-		lout := strings.TrimSpace(lr.Stdout)
-		if lout != "" {
-			var labeled []BeadItem
-			if err := json.Unmarshal([]byte(lout), &labeled); err == nil {
-				epicLabeled := make(map[string][]string)
-				for _, li := range labeled {
-					epicLabeled[li.ID] = li.Labels
-				}
-				for i := range items {
-					if labels, ok := epicLabeled[items[i].ID]; ok {
-						items[i].Labels = labels
-					}
-				}
-			}
-		}
+	items, err := parseJSONL(path)
+	if err != nil {
+		return fmt.Errorf("parsing beads JSONL: %w", err)
 	}
 
 	today := time.Now().Format("2006-01-02")
