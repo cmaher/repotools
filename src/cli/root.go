@@ -37,7 +37,7 @@ func NewRootCmd() *cobra.Command {
 		newLocCmd(),
 		newFnSpansCmd(),
 		newMultiBeadCmd(),
-		newBeadStatusCmd(),
+		newTkStatusCmd(),
 	)
 
 	return cmd
