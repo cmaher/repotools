@@ -1,5 +1,6 @@
 docs/plans/
 /repotools
+.claude/settings.local.json
 
 # bv (beads viewer) local config and caches
 .bv/
