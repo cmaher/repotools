@@ -238,6 +238,28 @@ func BuildStatusReport(items []Ticket, today string) string {
 		out = append(out, "")
 	}
 
+	// Orphaned tickets: non-epic, non-closed, with no parent or parent not a known epic
+	var orphans []Ticket
+	for _, it := range items {
+		if it.IsEpic() || it.Status == "closed" {
+			continue
+		}
+		if it.Parent == "" {
+			orphans = append(orphans, it)
+		} else if _, ok := epics[it.Parent]; !ok {
+			// Parent exists but isn't a known (non-closed) epic — also orphaned
+			orphans = append(orphans, it)
+		}
+	}
+	if len(orphans) > 0 {
+		sort.Slice(orphans, func(i, j int) bool { return orphans[i].Title < orphans[j].Title })
+		out = append(out, "[Orphaned]")
+		for _, o := range orphans {
+			out = append(out, fmt.Sprintf("  %-12s %-7s %s", o.ID, o.Status, o.Title))
+		}
+		out = append(out, "")
+	}
+
 	return strings.Join(out, "\n")
 }
 

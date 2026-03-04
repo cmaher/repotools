@@ -16,8 +16,8 @@ func loadTestItems(t *testing.T) []Ticket {
 
 func TestLoadTickets(t *testing.T) {
 	items := loadTestItems(t)
-	if len(items) != 5 {
-		t.Fatalf("expected 5 tickets, got %d", len(items))
+	if len(items) != 7 {
+		t.Fatalf("expected 7 tickets, got %d", len(items))
 	}
 }
 
@@ -81,6 +81,46 @@ func TestBuildStatusReport_ClosedSubEpicExcluded(t *testing.T) {
 	}
 	if !strings.Contains(report, "Open Sub") {
 		t.Errorf("open sub-epic missing in:\n%s", report)
+	}
+}
+
+func TestBuildStatusReport_OrphanedTickets(t *testing.T) {
+	items := loadTestItems(t)
+	report := BuildStatusReport(items, "2026-02-28")
+
+	if !strings.Contains(report, "[Orphaned]") {
+		t.Errorf("missing Orphaned section in:\n%s", report)
+	}
+	if !strings.Contains(report, "Orphan Feature") {
+		t.Errorf("missing Orphan Feature in:\n%s", report)
+	}
+	if !strings.Contains(report, "Orphan Task") {
+		t.Errorf("missing Orphan Task in:\n%s", report)
+	}
+}
+
+func TestBuildStatusReport_OrphanedClosedExcluded(t *testing.T) {
+	items := []Ticket{
+		{ID: "O1", Title: "Open Orphan", Type: "task", Status: "open", Priority: 2},
+		{ID: "O2", Title: "Closed Orphan", Type: "task", Status: "closed", Priority: 2},
+	}
+	report := BuildStatusReport(items, "2026-02-28")
+	if !strings.Contains(report, "Open Orphan") {
+		t.Errorf("missing open orphan in:\n%s", report)
+	}
+	if strings.Contains(report, "Closed Orphan") {
+		t.Errorf("closed orphan should not appear in:\n%s", report)
+	}
+}
+
+func TestBuildStatusReport_NoOrphansWhenAllParented(t *testing.T) {
+	items := []Ticket{
+		{ID: "E1", Title: "Epic", Type: "epic", Status: "open", Priority: 1},
+		{ID: "T1", Title: "Task", Type: "task", Status: "open", Priority: 2, Parent: "E1"},
+	}
+	report := BuildStatusReport(items, "2026-02-28")
+	if strings.Contains(report, "[Orphaned]") {
+		t.Errorf("should not have Orphaned section when all tickets are parented:\n%s", report)
 	}
 }
 
