@@ -207,24 +207,22 @@ func BuildStatusReport(items []Ticket, today string) string {
 	var out []string
 	out = append(out, fmt.Sprintf("Project Status — %s  (%d open, %d closed)", today, totalOpen, totalClosed), "")
 
-	pmap := []struct {
-		val   int
-		label string
-	}{{1, "P1"}, {2, "P2"}, {3, "P3"}}
+	// Group top-level epics by priority
+	epicsByPri := make(map[int][]Ticket)
+	for _, e := range topEpics {
+		epicsByPri[e.Priority] = append(epicsByPri[e.Priority], e)
+	}
+	var pris []int
+	for p := range epicsByPri {
+		pris = append(pris, p)
+	}
+	sort.Ints(pris)
 
-	for _, p := range pmap {
-		var pEpics []Ticket
-		for _, e := range topEpics {
-			if e.Priority == p.val {
-				pEpics = append(pEpics, e)
-			}
-		}
-		if len(pEpics) == 0 {
-			continue
-		}
+	for _, p := range pris {
+		pEpics := epicsByPri[p]
 		sort.Slice(pEpics, func(i, j int) bool { return pEpics[i].Title < pEpics[j].Title })
 
-		out = append(out, fmt.Sprintf("[%s]", p.label))
+		out = append(out, fmt.Sprintf("[P%d]", p))
 
 		for _, ep := range pEpics {
 			c := descendantCounts(ep.ID)
